@@ -152,6 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Neuro2.cpp" />
+    <ClCompile Include="NeuroNetwork.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NeuroNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
