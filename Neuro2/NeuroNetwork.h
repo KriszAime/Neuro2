@@ -41,10 +41,11 @@ namespace NeuralNet {
 		//bool Test
 	private:
 		double hwrandom32();
+		size_t hwrandom32_t(size_t from, size_t to);
 		NeuralMemory *Memory = nullptr; //Count = PatternCount
 		int PatternCount, NumInput, NumOutput, NumHiddenLayers = 1;
 		int* ranpat=nullptr; //Pattern Futtatás sorrend
-		double eta = 0.5, alpha = 0.9, smallwt = 0.5;
+		double eta = 0.1, alpha = 0.5, smallwt = 0.5; //eta=gradient descent contribution, alpha= momentum, smallwt = the maximum absolute size of your initial weights
 	};
 
 }

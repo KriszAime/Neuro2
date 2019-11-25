@@ -1,4 +1,5 @@
 #include "NeuroNetwork.h"
+#include <iostream>
 
 NeuralNet::NeuralNetwork::NeuralNetwork(NeuralImportData* TrainingData, int HiddenCount)
 {
@@ -69,8 +70,8 @@ bool NeuralNet::NeuralNetwork::TrainUntil(double AcceptedError, unsigned long Ma
 	{
 		for (int l = 1; l < NumHiddenLayers; l++)
 		{
-			DeltaWeightLIH[l] = new double* [Memory->HiddenLayers[l-1].NumHiddenNodes];
-			for (int ih = 0; ih < Memory->HiddenLayers[l-1].NumHiddenNodes; ih++)
+			DeltaWeightLIH[l] = new double* [Memory->HiddenLayers[l - 1].NumHiddenNodes];
+			for (int ih = 0; ih < Memory->HiddenLayers[l - 1].NumHiddenNodes; ih++)
 			{
 				DeltaWeightLIH[l][ih] = new double[Memory->HiddenLayers[l].NumHiddenNodes];
 				for (int hh = 0; hh < Memory->HiddenLayers[l].NumHiddenNodes; hh++)
@@ -84,7 +85,7 @@ bool NeuralNet::NeuralNetwork::TrainUntil(double AcceptedError, unsigned long Ma
 	}
 
 	/* initialize WeightHO and DeltaWeightHO */
-	double** DeltaWeightHO = new double* [Memory->HiddenLayers[NumHiddenLayers-1].NumHiddenNodes];
+	double** DeltaWeightHO = new double* [Memory->HiddenLayers[NumHiddenLayers - 1].NumHiddenNodes];
 	for (int h = 0; h < Memory->HiddenLayers[NumHiddenLayers - 1].NumHiddenNodes; h++)
 	{
 		DeltaWeightHO[h] = new double[NumOutput];
@@ -95,6 +96,23 @@ bool NeuralNet::NeuralNetwork::TrainUntil(double AcceptedError, unsigned long Ma
 		}
 	}
 
+	for (size_t p = 0; p < PatternCount; p++)
+		ranpat[p] = p;
+
+	double Error;
+	for (size_t epoch = 0; epoch < MaxEpochs; epoch++)
+	{
+		for (size_t p = 0; p < PatternCount; p++) /* randomize order of individuals */
+		{
+			int rp = hwrandom32_t(0, PatternCount-1);
+			int tmp = ranpat[p]; ranpat[p] = ranpat[rp]; ranpat[rp] = tmp;
+		}
+		Error = 0.0; //set no error.
+		for (size_t np = 0; np < PatternCount; np++) /* repeat for all the training patterns */
+		{
+
+		}
+	}
 
 	delete[] DeltaWeightIH, DeltaWeightLIH, DeltaWeightHO;
 	return false;
@@ -105,4 +123,11 @@ double NeuralNet::NeuralNetwork::hwrandom32() //0..1
 	unsigned int ret;
 	_rdrand32_step(&ret);
 	return ((double)ret / ((double)UINT_MAX + 1));
+}
+
+size_t NeuralNet::NeuralNetwork::hwrandom32_t(size_t from, size_t to) //int from...to - exclusive
+{
+	size_t ret;
+	_rdrand32_step(&ret);
+	return from + ret % ((to+1)-from);
 }

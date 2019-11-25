@@ -41,6 +41,7 @@ int main()
 	//-
 	NeuralNetwork* NeuralNet = new NeuralNetwork(Import, 3);
 
+
 	NeuralNet->TrainUntil(.004, 10000, true);
 
 	system("Pause");
