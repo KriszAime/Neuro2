@@ -4,6 +4,7 @@
 #include <climits>
 
 namespace NeuralNet {
+	typedef unsigned int uint;
 	struct NeuralPattern
 	{
 		double* Inputs;
@@ -19,7 +20,7 @@ namespace NeuralNet {
 		double* Hidden; //node count
 		double** WeightIH; //Inputs Count * Hidden Count (Ez csak Layerenként más cím, Patternenként ugyanaz) *
 		double* SumH; //weighted contribution from each input unit
-		int NumHiddenNodes; //<-node count
+		uint NumHiddenNodes; //<-node count
 	};
 	struct NeuralMemory
 	{
@@ -41,9 +42,9 @@ namespace NeuralNet {
 		//bool Test
 	private:
 		double hwrandom32();
-		size_t hwrandom32_t(size_t from, size_t to);
+		uint hwrandom32_t(uint from, uint to);
 		NeuralMemory *Memory = nullptr; //Count = PatternCount
-		int PatternCount, NumInput, NumOutput, NumHiddenLayers = 1;
+		uint PatternCount, NumInput, NumOutput, NumHiddenLayers = 1;
 		int* ranpat=nullptr; //Pattern Futtatás sorrend
 		double eta = 0.1, alpha = 0.5, smallwt = 0.5; //eta=gradient descent contribution, alpha= momentum, smallwt = the maximum absolute size of your initial weights
 	};

@@ -55,10 +55,10 @@ bool NeuralNet::NeuralNetwork::TrainUntil(double AcceptedError, unsigned long Ma
 {
 	/* initialize WeightIH and DeltaWeightIH */
 	double** DeltaWeightIH = new double* [NumInput];
-	for (int i = 0; i < NumInput; i++)
+	for (uint i = 0; i < NumInput; i++)
 	{
 		DeltaWeightIH[i] = new double[Memory->HiddenLayers->NumHiddenNodes];
-		for (int h = 0; h < Memory->HiddenLayers->NumHiddenNodes; h++)
+		for (uint h = 0; h < Memory->HiddenLayers->NumHiddenNodes; h++)
 		{
 			DeltaWeightIH[i][h] = 0.0;
 			Memory->HiddenLayers->WeightIH[i][h] = 2.0 * (hwrandom32() - 0.5) * smallwt;
@@ -68,13 +68,13 @@ bool NeuralNet::NeuralNetwork::TrainUntil(double AcceptedError, unsigned long Ma
 	double*** DeltaWeightLIH = new double** [NumHiddenLayers];
 	if (NumHiddenLayers > 1)
 	{
-		for (int l = 1; l < NumHiddenLayers; l++)
+		for (uint l = 1; l < NumHiddenLayers; l++)
 		{
 			DeltaWeightLIH[l] = new double* [Memory->HiddenLayers[l - 1].NumHiddenNodes];
-			for (int ih = 0; ih < Memory->HiddenLayers[l - 1].NumHiddenNodes; ih++)
+			for (uint ih = 0; ih < Memory->HiddenLayers[l - 1].NumHiddenNodes; ih++)
 			{
 				DeltaWeightLIH[l][ih] = new double[Memory->HiddenLayers[l].NumHiddenNodes];
-				for (int hh = 0; hh < Memory->HiddenLayers[l].NumHiddenNodes; hh++)
+				for (uint hh = 0; hh < Memory->HiddenLayers[l].NumHiddenNodes; hh++)
 				{
 					DeltaWeightLIH[l][ih][hh] = 0.0;
 					Memory->HiddenLayers[l].WeightIH[ih][hh] = 2.0 * (hwrandom32() - 0.5) * smallwt;
@@ -86,29 +86,29 @@ bool NeuralNet::NeuralNetwork::TrainUntil(double AcceptedError, unsigned long Ma
 
 	/* initialize WeightHO and DeltaWeightHO */
 	double** DeltaWeightHO = new double* [Memory->HiddenLayers[NumHiddenLayers - 1].NumHiddenNodes];
-	for (int h = 0; h < Memory->HiddenLayers[NumHiddenLayers - 1].NumHiddenNodes; h++)
+	for (uint h = 0; h < Memory->HiddenLayers[NumHiddenLayers - 1].NumHiddenNodes; h++)
 	{
 		DeltaWeightHO[h] = new double[NumOutput];
-		for (int o = 0; o < NumOutput; o++)
+		for (uint o = 0; o < NumOutput; o++)
 		{
 			DeltaWeightHO[h][o] = 0.0;
 			Memory->WeightHO[h][o] = 2.0 * (hwrandom32() - 0.5) * smallwt;
 		}
 	}
 
-	for (size_t p = 0; p < PatternCount; p++)
+	for (uint p = 0; p < PatternCount; p++)
 		ranpat[p] = p;
 
 	double Error;
-	for (size_t epoch = 0; epoch < MaxEpochs; epoch++)
+	for (uint epoch = 0; epoch < MaxEpochs; epoch++)
 	{
-		for (size_t p = 0; p < PatternCount; p++) /* randomize order of individuals */
+		for (uint p = 0; p < PatternCount; p++) /* randomize order of individuals */
 		{
-			int rp = hwrandom32_t(0, PatternCount-1);
-			int tmp = ranpat[p]; ranpat[p] = ranpat[rp]; ranpat[rp] = tmp;
+			uint rp = hwrandom32_t(0, PatternCount-1);
+			uint tmp = ranpat[p]; ranpat[p] = ranpat[rp]; ranpat[rp] = tmp;
 		}
 		Error = 0.0; //set no error.
-		for (size_t np = 0; np < PatternCount; np++) /* repeat for all the training patterns */
+		for (uint np = 0; np < PatternCount; np++) /* repeat for all the training patterns */
 		{
 
 		}
@@ -125,9 +125,9 @@ double NeuralNet::NeuralNetwork::hwrandom32() //0..1
 	return ((double)ret / ((double)UINT_MAX + 1));
 }
 
-size_t NeuralNet::NeuralNetwork::hwrandom32_t(size_t from, size_t to) //int from...to - exclusive
+NeuralNet::uint NeuralNet::NeuralNetwork::hwrandom32_t(uint from, uint to) //int from...to - exclusive
 {
-	size_t ret;
+	uint ret;
 	_rdrand32_step(&ret);
 	return from + ret % ((to+1)-from);
 }
